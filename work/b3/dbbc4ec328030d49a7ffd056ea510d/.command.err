@@ -1,0 +1,10 @@
+Unable to find image 'nanozoo/samtools:1.20--d1e21ae' locally
+1.20--d1e21ae: Pulling from nanozoo/samtools
+04e7578caeaa: Pulling fs layer
+c893f9326bb9: Pulling fs layer
+9548983a4b0b: Pulling fs layer
+7246f7527d14: Pulling fs layer
+ab202d730606: Pulling fs layer
+348390f2ef44: Pulling fs layer
+7246f7527d14: Waiting
+ab202d730606: Waiting

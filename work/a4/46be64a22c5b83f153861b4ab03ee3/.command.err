@@ -1,0 +1,30 @@
+Unable to find image 'nanozoo/minimap2:2.28--9e3bd01' locally
+2.28--9e3bd01: Pulling from nanozoo/minimap2
+04e7578caeaa: Already exists
+c893f9326bb9: Already exists
+9548983a4b0b: Already exists
+459342e5df7b: Pulling fs layer
+b33592dc8fe5: Pulling fs layer
+d7c5ed7cbd60: Pulling fs layer
+b33592dc8fe5: Verifying Checksum
+b33592dc8fe5: Download complete
+459342e5df7b: Download complete
+459342e5df7b: Pull complete
+b33592dc8fe5: Pull complete
+d7c5ed7cbd60: Verifying Checksum
+d7c5ed7cbd60: Download complete
+d7c5ed7cbd60: Pull complete
+Digest: sha256:933ec2df42bbde96433dc9ec2b45f63af84a9e2d2947697178d47bfa8589bb53
+Status: Downloaded newer image for nanozoo/minimap2:2.28--9e3bd01
+[M::mm_idx_gen::0.065*1.01] collected minimizers
+[M::mm_idx_gen::0.091*1.01] sorted minimizers
+[M::main::0.091*1.01] loaded/built the index for 3 target sequence(s)
+[M::mm_mapopt_update::0.097*1.01] mid_occ = 19
+[M::mm_idx_stat] kmer size: 15; skip: 10; is_hpc: 0; #seq: 3
+[M::mm_idx_stat::0.102*1.01] distinct minimizers: 511832 (97.19% are singletons); average occurrences: 1.053; average spacing: 5.342; total length: 2880276
+[M::worker_pipeline::134.857*1.00] mapped 119542 sequences
+[M::worker_pipeline::270.709*1.00] mapped 119803 sequences
+[M::worker_pipeline::287.963*1.00] mapped 15110 sequences
+[M::main] Version: 2.28-r1209
+[M::main] CMD: minimap2 -t 1 --secondary=no -ax map-ont -y polished_assembly_10.fasta intermediate.fastq
+[M::main] Real time: 288.032 sec; CPU: 288.015 sec; Peak RSS: 2.778 GB
