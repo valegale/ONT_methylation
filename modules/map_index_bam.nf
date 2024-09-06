@@ -2,55 +2,38 @@ process bam2fastq {
     // converts the BAM file from Dorado to FASTQ format 
     input:
     path bam_file
-    path output_dir
 
     output:
-    path "${output_dir}/intermediate.fastq" 
+    path "calling.fastq" 
 
     script:
     """
-    samtools fastq ${bam_file} -T MM,ML > ${output_dir}/intermediate.fastq
+    samtools fastq ${bam_file} -T MM,ML > calling.fastq
 
     """
 }
 
 process minimap2 {
-    // align with minimap2
+    // align with minimap2 
+
+    cpus 8
+     
     input:
     path fastq_file
     path reference
-    path output_dir
 
     output:
-    path "${output_dir}/intermediate.sam"
+    path "methylation_mapped.bam" 
 
     script:
     """
-    minimap2 -t $task.cpus --secondary=no -ax map-ont -y ${reference} ${fastq_file} > ${output_dir}/intermediate.sam
+    minimap2 -t $task.cpus --secondary=no -ax map-ont -y ${reference} ${fastq_file} | \
+    samtools view -b | \
+    samtools sort -@ $task.cpus -o methylation_mapped.bam
 
-    # Clean up intermediate files
-    rm ${fastq_file}
     """
 }
 
-process sort {
-    // sort an aligned BAM
-    input:
-    path sam_file 
-    path output_dir
-
-    output:
-    path "${output_dir}/methylation_mapped.bam" 
-
-    script:
-    """
-    samtools view -b ${sam_file} | \
-    samtools sort -@ 10 -o ${output_dir}/methylation_mapped.bam
-
-    # Clean up intermediate files
-    rm ${sam_file}
-    """
-}
 
 process index {
     // index an aligned and sorted BAM
