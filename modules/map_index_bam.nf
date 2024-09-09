@@ -13,8 +13,25 @@ process bam2fastq {
     """
 }
 
+process zipfastq {
+    // zip fastq file
+    publishDir  params.outdir, mode:'copy'
+        
+    input:
+    path bam_file
+
+    output:
+    path "calling.fastq.gz" 
+
+    script:
+    """
+    gunzip ${bam_file}
+
+    """
+}
 process minimap2 {
     // align with minimap2 
+    publishDir  params.outdir, mode:'copy'
 
     cpus 8
      
@@ -37,6 +54,8 @@ process minimap2 {
 
 process index {
     // index an aligned and sorted BAM
+    publishDir  params.outdir, mode:'copy'
+
     input:
     path bam_file
 
