@@ -5,15 +5,14 @@ process modkit_pileup {
     cpus 8
 
     input:
-    path bam_file
-    path bam_file_index
+    tuple val(sample_id), path(mapped_bam), path(index_bam)
 
     output:
-    path "modkit_pileup_output.bed" 
+    tuple val(sample_id), path("${sample_id}_modkit_pileup_output.bed")
 
     script:
     """
-    modkit pileup -t $task.cpus  ${bam_file} modkit_pileup_output.bed --filter-threshold ${params.filter_threshold_modkit}
+    modkit pileup -t $task.cpus  ${mapped_bam} ${sample_id}_modkit_pileup_output.bed --filter-threshold ${params.filter_threshold_modkit}
     """
 }
 
@@ -30,7 +29,7 @@ process modkit_find_motifs {
 
     script:
     """
-    modkit find-motifs -t 12 --in-bedmethyl ${bed_file} --ref ${reference}  > motifs.log
+    modkit find-motifs -t 12 --in-bedmethyl ${bed_file} --ref ${reference} -o outout.tsv
     """
 }
 

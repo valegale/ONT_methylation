@@ -1,14 +1,14 @@
 process bam2fastq {
     // converts the BAM file from Dorado to FASTQ format 
     input:
-    path bam_file
+    tuple val(sample_id), path(bam_file), path(reference) 
 
     output:
-    path "calling.fastq" 
+    tuple val(sample_id), path("${sample_id}.fastq"), path(reference) 
 
     script:
     """
-    samtools fastq ${bam_file} -T MM,ML > calling.fastq
+    samtools fastq ${bam_file} -T MM,ML > ${sample_id}.fastq
 
     """
 }
@@ -18,17 +18,17 @@ process zipfastq {
     publishDir  params.outdir, mode:'copy'
         
     input:
-    path bam_file
+    tuple val(sample_id), path(fastq_file), path(reference)
 
     output:
-    path "calling.fastq.gz" 
+    path "${sample_id}.fastq.gz"
 
     script:
     """
-    gunzip ${bam_file}
-
+    gzip -c ${fastq_file} > ${sample_id}.fastq.gz
     """
 }
+
 process minimap2 {
     // align with minimap2 
     publishDir  params.outdir, mode:'copy'
@@ -36,34 +36,31 @@ process minimap2 {
     cpus 8
      
     input:
-    path fastq_file
-    path reference
+    tuple val(sample_id), path(fastq_file), path(reference)
 
     output:
-    path "methylation_mapped.bam" 
+    tuple val(sample_id), path("${sample_id}_methylation_mapped.bam")
 
     script:
     """
     minimap2 -t $task.cpus --secondary=no -ax map-ont -y ${reference} ${fastq_file} | \
     samtools view -b | \
-    samtools sort -@ $task.cpus -o methylation_mapped.bam
-
+    samtools sort -@ $task.cpus -o ${sample_id}_methylation_mapped.bam
     """
 }
-
 
 process index {
     // index an aligned and sorted BAM
     publishDir  params.outdir, mode:'copy'
 
     input:
-    path bam_file
+    tuple val(sample_id), path(mapped_bam)
 
     output:
-    path "${bam_file}.bai"
+    tuple val(sample_id), path ("${mapped_bam}.bai")
 
     script:
     """
-    samtools index ${bam_file}
+    samtools index ${mapped_bam}
     """
 }
