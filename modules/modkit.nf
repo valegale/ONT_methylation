@@ -5,14 +5,32 @@ process modkit_pileup {
     cpus 8
 
     input:
-    tuple val(sample_id), path(mapped_bam), path(index_bam)
+    tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
 
     output:
-    tuple val(sample_id), path("${sample_id}_modkit_pileup_output.bed")
+    tuple val(sample_id), path("${sample_id}_modkit_pileup_output.bed"), path(reference)
 
     script:
     """
-    modkit pileup -t $task.cpus  ${mapped_bam} ${sample_id}_modkit_pileup_output.bed --filter-threshold ${params.filter_threshold_modkit}
+    modkit pileup -t $task.cpus  ${mapped_bam} ${sample_id}_modkit_pileup_output.bed --filter-threshold ${params.filter_threshold_modkit} 
+    """
+}
+
+process modkit_pileup_bedgraphs {
+    // execute the modkit pileup command
+    publishDir  params.outdir, mode:'copy'
+
+    cpus 8
+
+    input:
+    tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
+
+    output:
+    path("bedgraphs_${sample_id}")
+
+    script:
+    """
+    modkit pileup -t $task.cpus  ${mapped_bam} --bedgraph bedgraphs_${sample_id} --filter-threshold ${params.filter_threshold_modkit} 
     """
 }
 
@@ -21,15 +39,14 @@ process modkit_find_motifs {
     publishDir  params.outdir, mode:'copy'
 
     input:
-    path bed_file
-    path reference
+    tuple val(sample_id), path(bed_file), path(reference)
 
     output:
-    path "motifs.log" 
+    path "output.tsv" 
 
     script:
     """
-    modkit find-motifs -t 12 --in-bedmethyl ${bed_file} --ref ${reference} -o outout.tsv
+    modkit find-motifs -t 12 --in-bedmethyl ${bed_file} --ref ${reference} -o output.tsv
     """
 }
 

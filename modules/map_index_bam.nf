@@ -39,7 +39,7 @@ process minimap2 {
     tuple val(sample_id), path(fastq_file), path(reference)
 
     output:
-    tuple val(sample_id), path("${sample_id}_methylation_mapped.bam")
+    tuple val(sample_id), path("${sample_id}_methylation_mapped.bam"), path(reference)
 
     script:
     """
@@ -54,7 +54,7 @@ process index {
     publishDir  params.outdir, mode:'copy'
 
     input:
-    tuple val(sample_id), path(mapped_bam)
+    tuple val(sample_id), path(mapped_bam), path(reference)
 
     output:
     tuple val(sample_id), path ("${mapped_bam}.bai")
