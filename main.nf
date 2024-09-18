@@ -6,6 +6,7 @@ include { modkit_pileup; modkit_pileup_bedgraphs; modkit_find_motifs } from './m
 
     // Define the list of BAM files and reference files
     params.input_files = [
+        [ file('../ralstonia/test_dataset/contig_3.bam'), file('../ralstonia/test_dataset/contig_3.fasta') ],
         [ file('../ralstonia/test_dataset/contig_4.bam'), file('../ralstonia/test_dataset/contig_4.fasta') ]
     ]
 
@@ -22,6 +23,7 @@ workflow {
     fastq_files = bam2fastq(bam_ref_pairs)
     zipfastq(fastq_files)
     mapped_bams = minimap2(fastq_files)
+   
     index_bam = index(mapped_bams)
 
     // Join the channels by sample ID

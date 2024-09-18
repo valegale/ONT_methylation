@@ -4,11 +4,12 @@ process bam2fastq {
     tuple val(sample_id), path(bam_file), path(reference) 
 
     output:
-    tuple val(sample_id), path("${sample_id}.fastq"), path(reference) 
+    tuple val(sample_id), path("${sample_id}/${sample_id}.fastq"), path(reference) 
 
     script:
     """
-    samtools fastq ${bam_file} -T MM,ML > ${sample_id}.fastq
+    mkdir -p ${sample_id}
+    samtools fastq ${bam_file} -T MM,ML > ${sample_id}/${sample_id}.fastq
 
     """
 }
@@ -21,11 +22,12 @@ process zipfastq {
     tuple val(sample_id), path(fastq_file), path(reference)
 
     output:
-    path "${sample_id}.fastq.gz"
+    path "${sample_id}/${sample_id}.fastq.gz"
 
     script:
     """
-    gzip -c ${fastq_file} > ${sample_id}.fastq.gz
+    mkdir -p ${sample_id}
+    gzip -c ${fastq_file} > ${sample_id}/${sample_id}.fastq.gz
     """
 }
 
@@ -39,13 +41,14 @@ process minimap2 {
     tuple val(sample_id), path(fastq_file), path(reference)
 
     output:
-    tuple val(sample_id), path("${sample_id}_methylation_mapped.bam"), path(reference)
+    tuple val(sample_id), path("${sample_id}/methylation_mapped.bam"), path(reference)
 
     script:
     """
+    mkdir -p ${sample_id}
     minimap2 -t $task.cpus --secondary=no -ax map-ont -y ${reference} ${fastq_file} | \
     samtools view -b | \
-    samtools sort -@ $task.cpus -o ${sample_id}_methylation_mapped.bam
+    samtools sort -@ $task.cpus -o ${sample_id}/methylation_mapped.bam
     """
 }
 
@@ -57,10 +60,13 @@ process index {
     tuple val(sample_id), path(mapped_bam), path(reference)
 
     output:
-    tuple val(sample_id), path ("${mapped_bam}.bai")
+    tuple val(sample_id), path ("${sample_id}/${mapped_bam}.bai")
 
     script:
     """
-    samtools index ${mapped_bam}
+    mkdir -p ${sample_id}
+    mv ${mapped_bam} ${sample_id}
+    samtools index ${sample_id}/${mapped_bam} 
+    
     """
 }
