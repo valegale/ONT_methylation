@@ -17,7 +17,7 @@ process modkit_pileup {
 }
 
 process modkit_pileup_bedgraphs {
-    // execute the modkit pileup command
+    // execute the modkit pileup command to obtain the bedgraphs
     publishDir  params.outdir, mode:'copy'
 
     cpus 8
@@ -31,6 +31,22 @@ process modkit_pileup_bedgraphs {
     script:
     """
     modkit pileup -t $task.cpus  ${mapped_bam} --bedgraph ${sample_id}/bedgraphs --filter-threshold ${params.filter_threshold_modkit} 
+    """
+}
+
+process custom_bedgraphs {
+    // run an inhouse script that computes which bases are methylated: modified bases / total bases 
+    publishDir  params.outdir, mode:'copy'
+
+    input:
+    tuple val(sample_id), path(bed_file), path(reference)
+
+    output:
+    path("${sample_id}/bedgraphs")
+
+    script:
+    """
+    python scripts/custom_bedgraphs.py ${bed_file} ${reference} ${sample_id}/bedgraphs_customized
     """
 }
 
