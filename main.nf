@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 include { bam2fastq; zipfastq; minimap2; index } from './modules/map_index_bam.nf'
-include { modkit_pileup; modkit_pileup_bedgraphs; modkit_find_motifs } from './modules/modkit.nf'
+include { modkit_pileup; modkit_pileup_bedgraphs; modkit_find_motifs; custom_bedgraphs} from './modules/modkit.nf'
 
 
     // Define the list of BAM files and reference files
@@ -33,4 +33,6 @@ workflow {
     bed_file = modkit_pileup(bam_and_index)
     modkit_pileup_bedgraphs(bam_and_index)
     modkit_find_motifs(bed_file)
+    custom_bedgraphs(bed_file)
+
 }

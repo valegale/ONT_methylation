@@ -42,11 +42,11 @@ process custom_bedgraphs {
     tuple val(sample_id), path(bed_file), path(reference)
 
     output:
-    path("${sample_id}/bedgraphs")
+    path("${sample_id}/bedgraphs_customized")
 
     script:
     """
-    python scripts/custom_bedgraphs.py ${bed_file} ${reference} ${sample_id}/bedgraphs_customized
+    python ${baseDir}/scripts/custom_bedgraphs.py ${bed_file} ${reference} ${sample_id}/bedgraphs_customized
     """
 }
 
@@ -63,6 +63,7 @@ process modkit_find_motifs {
     script:
     """
     mkdir -p ${sample_id}
+    modkit --version
     modkit find-motifs -t 12 --in-bedmethyl ${bed_file} --ref ${reference} -o ${sample_id}/modkit_motifs.tsv
     """
 }

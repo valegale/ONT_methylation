@@ -72,5 +72,3 @@ if __name__ == "__main__":
     modkit_table = read_modkit(modkit_file_path)
     filtered_table = modkit_table[(modkit_table.Total_coverage >= min_coverage) & (modkit_table.Percent_modified >= percent_cutoff)].drop("End", axis=1) 
     create_bedgraphs_file(modkit_table, args.results_folder, "bedgraph", min_coverage)
-
-
