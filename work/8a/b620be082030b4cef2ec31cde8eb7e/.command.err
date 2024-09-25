@@ -1,2 +1,0 @@
-[E::hts_open_format] Failed to open file "calling_barcode10.bam" : No such file or directory
-samtools bam2fq: Cannot read file "calling_barcode10.bam": No such file or directory
