@@ -7,7 +7,7 @@ include { modkit_pileup; modkit_pileup_bedgraphs; modkit_find_motifs; custom_bed
     // Define the list of BAM files and reference files
     params.input_files = [
         [ file('../ralstonia/test_dataset/contig_3.bam'), file('../ralstonia/test_dataset/contig_3.fasta') ],
-        [ file('../ralstonia/test_dataset/contig_4.bam'), file('../ralstonia/test_dataset/contig_4.fasta') ]
+        //[ file('../ralstonia/test_dataset/contig_4.bam'), file('../ralstonia/test_dataset/contig_4.fasta') ]
     ]
 
 workflow {
