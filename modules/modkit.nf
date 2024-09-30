@@ -3,6 +3,7 @@ process modkit_pileup {
     publishDir  params.outdir, mode:'copy'
 
     cpus 8
+    memory '100 GB'
 
     input:
     tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
@@ -21,6 +22,7 @@ process modkit_pileup_bedgraphs {
     publishDir  params.outdir, mode:'copy'
 
     cpus 8
+    memory '100 GB'
 
     input:
     tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)

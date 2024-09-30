@@ -29,20 +29,37 @@ def read_modkit(modkit_output):
     
     return d
 
+def compute_statistics_modifications(filtered_table, results_folder):
+    # % of methylated a (6mA)
+    a_modifications = filtered_table[filtered_table["Modification"] == 'a']
+        
+    a_modification_counts = a_modifications["Contig"].value_counts().reset_index()
+    a_modification_counts.columns = ['Contig', 'tot_6mA']
+    a_modification_counts['tot_a'] = a_modification_counts['Contig'].map(lambda x: reference_genome[x].lower().count('a') if x in reference_genome else None)
+    a_modification_counts['%_methylation'] = (a_modification_counts['tot_6mA'] / a_modification_counts['tot_a']) * 100
+        
+    # % of methylated c (5mC)
+    c5_modifications = filtered_table[filtered_table["Modification"] == 'm']
+    c5_modification_counts = c5_modifications["Contig"].value_counts().reset_index()
+    c5_modification_counts.columns = ['Contig', 'tot_5mC']
+    c5_modification_counts['tot_c'] = c5_modification_counts['Contig'].map(lambda x: reference_genome[x].lower().count('c') if x in reference_genome else None)
+    c5_modification_counts['%_methylation'] = (c5_modification_counts['tot_5mC'] / c5_modification_counts['tot_c']) * 100
 
-def create_bedgraphs_file(modkit_table, folder_bedgraphs, prefix, min_coverage):
-    strands = ["-", "+"]
-    modifications = ["a", "m", "21839"]
-    columns_bedgraph = ['Contig', 'Position', 'End', 'Percent_modified', 'Total_coverage']
+        
+    # % of methylated c (4mC)
+    c4_modifications = filtered_table[filtered_table["Modification"] == '21839']
+    c4_modification_counts = c4_modifications["Contig"].value_counts().reset_index()
+    c4_modification_counts.columns = ['Contig', 'tot_4mC']
+    c4_modification_counts['tot_c'] = c4_modification_counts['Contig'].map(lambda x: reference_genome[x].lower().count('c') if x in reference_genome else None)
+    c4_modification_counts['%_methylation'] = (c4_modification_counts['tot_4mC'] / c4_modification_counts['tot_c']) * 100
+ 
 
-    for modification in modifications:
-        for strand in strands:
-            bedgraph_table = modkit_table[(modkit_table.Strand == strand) & (modkit_table.Modification == modification) & (modkit_table.Total_coverage >= min_coverage)][columns_bedgraph]
-
-            file_name = f"{prefix}_{'positive_' if strand == '+' else 'negative_'}{modification}.bedgraph"
-            file_path = f"{folder_bedgraphs}/{file_name}"
-
-            bedgraph_table.to_csv(file_path, sep='\t', header=False, index=False)
+    output_path =  os.path.join(results_folder, "6mA_percentage.csv")
+    a_modification_counts.to_csv(output_path, sep="\t", index = False)
+    output_path =  os.path.join(results_folder, "5mC_percentage.csv")
+    c5_modification_counts.to_csv(output_path, sep="\t", index = False)
+    output_path =  os.path.join(results_folder, "4mC_percentage.csv")
+    c4_modification_counts.to_csv(output_path, sep="\t", index = False)
 
 
 if __name__ == "__main__":
@@ -52,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument('fasta_file_path', type=str, help='Path to the reference genome FASTA file')
     parser.add_argument('results_folder', type=str, help='Name of the folder with the results')
     parser.add_argument('--min_coverage', type=int, default=10, help='The minimum coverage required to consider a site for methylation (default 10)')
-    parser.add_argument('--percent_cutoff', type=int, default=0, help='Filter threshold for positions with a low level of methylation (default 0)') 
+    parser.add_argument('--percent_cutoff', type=int, default=50, help='Filter threshold for positions with a low level of methylation (default 50)') 
     args = parser.parse_args()
 
 
@@ -71,4 +88,4 @@ if __name__ == "__main__":
 
     modkit_table = read_modkit(modkit_file_path)
     filtered_table = modkit_table[(modkit_table.Total_coverage >= min_coverage) & (modkit_table.Percent_modified >= percent_cutoff)].drop("End", axis=1) 
-    create_bedgraphs_file(modkit_table, args.results_folder, "bedgraph", min_coverage)
+    compute_statistics_modifications(filtered_table, args.results_folder)
