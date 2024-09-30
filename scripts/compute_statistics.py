@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument('fasta_file_path', type=str, help='Path to the reference genome FASTA file')
     parser.add_argument('results_folder', type=str, help='Name of the folder with the results')
     parser.add_argument('--min_coverage', type=int, default=10, help='The minimum coverage required to consider a site for methylation (default 10)')
-    parser.add_argument('--percent_cutoff', type=int, default=50, help='Filter threshold for positions with a low level of methylation (default 50)') 
+    parser.add_argument('--percent_cutoff', type=int, default=0.5, help='Filter threshold for positions with a low level of methylation (default 0.5)') 
     args = parser.parse_args()
 
 

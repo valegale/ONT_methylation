@@ -3,7 +3,6 @@ process modkit_pileup {
     publishDir  params.outdir, mode:'copy'
 
     cpus 8
-    memory '100 GB'
 
     input:
     tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
@@ -22,7 +21,6 @@ process modkit_pileup_bedgraphs {
     publishDir  params.outdir, mode:'copy'
 
     cpus 8
-    memory '100 GB'
 
     input:
     tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
@@ -56,6 +54,8 @@ process modkit_find_motifs {
     // find motifs from the output of modkit pileup
     publishDir  params.outdir, mode:'copy'
 
+    cpus 12
+
     input:
     tuple val(sample_id), path(bed_file), path(reference)
 
@@ -65,8 +65,7 @@ process modkit_find_motifs {
     script:
     """
     mkdir -p ${sample_id}
-    modkit --version
-    modkit find-motifs -t 12 --in-bedmethyl ${bed_file} --ref ${reference} -o ${sample_id}/modkit_motifs.tsv
+    modkit find-motifs -t $task.cpus --in-bedmethyl ${bed_file} --ref ${reference} -o ${sample_id}/modkit_motifs.tsv
     """
 }
 
