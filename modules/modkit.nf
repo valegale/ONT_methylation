@@ -2,7 +2,10 @@ process modkit_pileup {
     // execute the modkit pileup command
     publishDir  params.outdir, mode:'copy'
 
-    cpus 8
+    cpus 12
+    memory { 50.GB * task.attempt}
+    errorStrategy { task.exitStatus in 137..140 ? 'retry' : 'terminate'}
+    maxRetries 3
 
     input:
     tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
@@ -20,7 +23,10 @@ process modkit_pileup_bedgraphs {
     // execute the modkit pileup command to obtain the bedgraphs
     publishDir  params.outdir, mode:'copy'
 
-    cpus 8
+    cpus 12
+    memory { 50.GB * task.attempt}
+    errorStrategy { task.exitStatus in 137..140 ? 'retry' : 'terminate'}
+    maxRetries 3
 
     input:
     tuple val(sample_id), path(mapped_bam), path(reference), path(index_bam)
@@ -55,6 +61,9 @@ process modkit_find_motifs {
     publishDir  params.outdir, mode:'copy'
 
     cpus 12
+    memory { 50.GB * task.attempt}
+    errorStrategy { task.exitStatus in 137..140 ? 'retry' : 'terminate'}
+    maxRetries 3
 
     input:
     tuple val(sample_id), path(bed_file), path(reference)
