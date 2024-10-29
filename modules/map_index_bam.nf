@@ -1,5 +1,6 @@
 process bam2fastq {
     // converts the BAM file from Dorado to FASTQ format 
+    label 'minimap2'
     input:
     tuple val(sample_id), path(bam_file), path(reference) 
 
@@ -15,6 +16,7 @@ process bam2fastq {
 }
 
 process zipfastq {
+    label 'biopython'
     // zip fastq file
     publishDir  params.outdir, mode:'copy'
         
@@ -32,6 +34,7 @@ process zipfastq {
 }
 
 process minimap2 {
+    label 'minimap2'
     // align with minimap2 
     publishDir  params.outdir, mode:'copy'
 
@@ -53,6 +56,7 @@ process minimap2 {
 }
 
 process index {
+    label 'minimap2'
     // index an aligned and sorted BAM
     publishDir  params.outdir, mode:'copy'
 

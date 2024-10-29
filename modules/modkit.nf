@@ -1,4 +1,5 @@
 process modkit_pileup {
+    label 'modkit'
     // execute the modkit pileup command
     publishDir  params.outdir, mode:'copy'
 
@@ -20,6 +21,7 @@ process modkit_pileup {
 }
 
 process modkit_pileup_bedgraphs {
+    label 'modkit'
     // execute the modkit pileup command to obtain the bedgraphs
     publishDir  params.outdir, mode:'copy'
 
@@ -41,6 +43,7 @@ process modkit_pileup_bedgraphs {
 }
 
 process custom_bedgraphs {
+    label 'biopython'
     // run an inhouse script that computes which bases are methylated: modified bases / total bases 
     publishDir  params.outdir, mode:'copy'
 
@@ -57,6 +60,7 @@ process custom_bedgraphs {
 }
 
 process modkit_find_motifs {
+    label 'modkit'
     // find motifs from the output of modkit pileup
     publishDir  params.outdir, mode:'copy'
 

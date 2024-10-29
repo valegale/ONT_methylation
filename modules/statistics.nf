@@ -1,4 +1,5 @@
 process compute_statistics {
+    label 'biopython'
     // run an inhouse script that computes which bases are methylated: modified bases / total bases 
     publishDir  params.outdir, mode:'copy'
 
