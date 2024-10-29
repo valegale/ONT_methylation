@@ -65,7 +65,7 @@ if (params.bam && params.list) { bam_input_ch = Channel
 */
 
 // load modules
-include { bam2fastq; zipfastq; minimap2; index } from './modules/map_index_bam.nf'
+include { bam2fastq; minimap2; index } from './modules/map_index_bam.nf'
 include { modkit_pileup; modkit_pileup_bedgraphs; modkit_find_motifs; custom_bedgraphs} from './modules/modkit.nf'
 include { compute_statistics } from './modules/statistics.nf'
 
@@ -74,10 +74,9 @@ include { compute_statistics } from './modules/statistics.nf'
 workflow {
     
     // combine FASTA and BAM channels to generate a channel: tuple val(sample_id), path(bam_file), path(reference) 
-    bam_ref_pairs = bam_input_ch.join(fasta_input_ch).view()
+    bam_ref_pairs = bam_input_ch.join(fasta_input_ch)
     
     fastq_files = bam2fastq(bam_ref_pairs)
-    zipfastq(fastq_files)
     mapped_bams = minimap2(fastq_files)
    
     index_bam = index(mapped_bams)
