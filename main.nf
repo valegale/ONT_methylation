@@ -1,11 +1,12 @@
 #!/usr/bin/env nextflow
+nextflow.enable.dsl=2
 
 include { bam2fastq; zipfastq; minimap2; index } from './modules/map_index_bam.nf'
 include { modkit_pileup; modkit_pileup_bedgraphs; modkit_find_motifs; custom_bedgraphs} from './modules/modkit.nf'
 include { compute_statistics } from './modules/statistics.nf'
 
 
-    // Define the list of BAM files and reference filescd
+    // Define the list of BAM files and reference files
     params.input_files = [
         [ file('../run_dorado_v5/barcode01/calling_barcode1.bam'), file('../run_dorado_v5/barcode01/polished_assembly_01.fasta')],
         [ file('../run_dorado_v5/barcode02/calling_barcode02.bam'), file('../run_dorado_v5/barcode02/polished_assembly_02.fasta')],
