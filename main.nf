@@ -74,7 +74,7 @@ include { compute_statistics } from './modules/statistics.nf'
 workflow {
     
     // combine FASTA and BAM channels to generate a channel: tuple val(sample_id), path(bam_file), path(reference) 
-    bam_ref_pairs = bam_input_ch.join(fasta_input_ch)
+    bam_ref_pairs = bam_input_ch.join(fasta_input_ch).view()
     
     fastq_files = bam2fastq(bam_ref_pairs)
     zipfastq(fastq_files)
