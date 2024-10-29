@@ -52,7 +52,7 @@ process custom_bedgraphs {
 
     script:
     """
-    python ${baseDir}/scripts/custom_bedgraphs.py ${bed_file} ${reference} ${sample_id}/bedgraphs_customized
+    custom_bedgraphs.py ${bed_file} ${reference} ${sample_id}/bedgraphs_customized
     """
 }
 

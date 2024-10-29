@@ -10,6 +10,6 @@ process compute_statistics {
 
     script:
     """
-    python ${baseDir}/scripts/compute_statistics.py ${bed_file} ${reference} ${sample_id}/methylation_statistics
+    compute_statistics.py ${bed_file} ${reference} ${sample_id}/methylation_statistics
     """
 }
