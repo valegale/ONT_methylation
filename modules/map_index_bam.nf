@@ -1,35 +1,18 @@
 process bam2fastq {
-    // converts the BAM file from Dorado to FASTQ format 
+    // converts the BAM file from Dorado to FASTQ format and gzip
     label 'minimap2'
+    publishDir  params.outdir, mode:'copy'
+
     input:
     tuple val(sample_id), path(bam_file), path(reference) 
 
     output:
-    tuple val(sample_id), path("${sample_id}/${sample_id}.fastq"), path(reference) 
+    tuple val(sample_id), path("${sample_id}/${sample_id}.fastq.gz"), path(reference) 
 
     script:
     """
     mkdir -p ${sample_id}
-    samtools fastq ${bam_file} -T MM,ML > ${sample_id}/${sample_id}.fastq
-
-    """
-}
-
-process zipfastq {
-    label 'biopython'
-    // zip fastq file
-    publishDir  params.outdir, mode:'copy'
-        
-    input:
-    tuple val(sample_id), path(fastq_file), path(reference)
-
-    output:
-    path "${sample_id}/${sample_id}.fastq.gz"
-
-    script:
-    """
-    mkdir -p ${sample_id}
-    gzip -c ${fastq_file} > ${sample_id}/${sample_id}.fastq.gz
+    samtools fastq ${bam_file} -T MM,ML | gzip -c - > ${sample_id}/${sample_id}.fastq.gz
     """
 }
 
@@ -38,8 +21,6 @@ process minimap2 {
     // align with minimap2 
     publishDir  params.outdir, mode:'copy'
 
-    cpus 8
-     
     input:
     tuple val(sample_id), path(fastq_file), path(reference)
 
@@ -49,9 +30,9 @@ process minimap2 {
     script:
     """
     mkdir -p ${sample_id}
-    minimap2 -t $task.cpus --secondary=no -ax map-ont -y ${reference} ${fastq_file} | \
+    minimap2 -t ${task.cpus} --secondary=no -ax map-ont -y ${reference} ${fastq_file} | \
     samtools view -b | \
-    samtools sort -@ $task.cpus -o ${sample_id}/methylation_mapped.bam
+    samtools sort -@ ${task.cpus} -o ${sample_id}/methylation_mapped.bam
     """
 }
 
