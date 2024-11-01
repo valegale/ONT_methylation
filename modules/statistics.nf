@@ -1,4 +1,5 @@
 process compute_statistics {
+    label 'biopython'
     // run an inhouse script that computes which bases are methylated: modified bases / total bases 
     publishDir  params.outdir, mode:'copy'
 
@@ -10,6 +11,6 @@ process compute_statistics {
 
     script:
     """
-    python ${baseDir}/scripts/compute_statistics.py ${bed_file} ${reference} ${sample_id}/methylation_statistics
+    compute_statistics.py ${bed_file} ${reference} ${sample_id}/methylation_statistics
     """
 }
