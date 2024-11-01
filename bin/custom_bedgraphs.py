@@ -34,7 +34,7 @@ def read_modkit(modkit_output):
 
 def save_filtered_tables(modkit_table, folder_tables, percent_cutoff, min_coverage):
     modifications = ["a", "m", "21839"] 
-    modification_names = {"a": "6ma", "m": "5mC", "21839": "4mc"}
+    modification_names = {"a": "6mA", "m": "5mC", "21839": "4mC"}
 
     for modification in modifications: 
         filtered_table = modkit_table[(modkit_table.Total_coverage >= min_coverage) & (modkit_table.Modification == modification) & (modkit_table.Percent_modified >= percent_cutoff)].drop("End", axis=1)   

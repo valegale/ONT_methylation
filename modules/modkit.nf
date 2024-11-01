@@ -50,7 +50,7 @@ process custom_bedgraphs {
     mkdir -p ${sample_id}/bedgraphs_customized
     mkdir -p ${sample_id}/modifications_tables
 
-    python ${baseDir}/scripts/custom_bedgraphs.py ${bed_file} ${reference} ${sample_id} --percent_cutoff ${params.percent_cutoff_modification_table}
+    custom_bedgraphs.py ${bed_file} ${reference} ${sample_id} --percent_cutoff ${params.percent_cutoff_modification_table}
     """
 }
 
