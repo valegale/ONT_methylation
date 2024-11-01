@@ -1,18 +1,34 @@
 process bam2fastq {
-    // converts the BAM file from Dorado to FASTQ format and gzip
+    // converts the BAM file from Dorado to FASTQ format 
     label 'minimap2'
-    publishDir  params.outdir, mode:'copy'
 
     input:
     tuple val(sample_id), path(bam_file), path(reference) 
 
     output:
-    tuple val(sample_id), path("${sample_id}/${sample_id}.fastq.gz"), path(reference) 
+    tuple val(sample_id), path("${sample_id}/${sample_id}.fastq"), path(reference) 
+    script:
+    """
+    mkdir -p ${sample_id}
+    samtools fastq ${bam_file} -T MM,ML > ${sample_id}/${sample_id}.fastq
+    """
+}
+
+process zipfastq {
+    // zip fastq file
+    label 'minimap2'
+    publishDir  params.outdir, mode:'copy'
+        
+    input:
+    tuple val(sample_id), path(fastq_file), path(reference)
+
+    output:
+    path "${sample_id}/${sample_id}.fastq.gz"
 
     script:
     """
     mkdir -p ${sample_id}
-    samtools fastq ${bam_file} -T MM,ML | gzip -c - > ${sample_id}/${sample_id}.fastq.gz
+    gzip -c ${fastq_file} > ${sample_id}/${sample_id}.fastq.gz
     """
 }
 
