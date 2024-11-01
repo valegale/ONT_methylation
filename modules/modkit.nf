@@ -34,7 +34,8 @@ process modkit_pileup_bedgraphs {
 
 process custom_bedgraphs {
     label 'biopython'
-    // run an inhouse script that computes which bases are methylated: modified bases / total bases 
+    // run an inhouse script that computes which bases are methylated: modified bases / total bases.
+    // additionally, it saves the positions with a high methylation levels in tsv tables, one for each modification (6mA, 5mC and 4mC).
     publishDir  params.outdir, mode:'copy'
 
     input:
@@ -42,10 +43,14 @@ process custom_bedgraphs {
 
     output:
     path("${sample_id}/bedgraphs_customized")
+    path("${sample_id}/modifications_tables")
 
     script:
     """
-    custom_bedgraphs.py ${bed_file} ${reference} ${sample_id}/bedgraphs_customized
+    mkdir -p ${sample_id}/bedgraphs_customized
+    mkdir -p ${sample_id}/modifications_tables
+
+    python ${baseDir}/scripts/custom_bedgraphs.py ${bed_file} ${reference} ${sample_id} --percent_cutoff ${params.percent_cutoff_modification_table}
     """
 }
 

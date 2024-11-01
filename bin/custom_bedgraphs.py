@@ -14,7 +14,7 @@ def read_modkit(modkit_output):
 
     d.columns = [
         "Contig", "Position", "End", "Modification", "drop0", "Strand", "drop1", "drop2", "drop3", "Valid_coverage",  
-        "fraction_modified", "Modified_bases", "Unmodified_bases", "Other_mod_base", "drop6", "Modification_below_threshold", "Other_bases", "drop7"]
+        "Fraction_modified", "Modified_bases", "Unmodified_bases", "Other_mod_base", "drop6", "Modification_below_threshold", "Other_bases", "drop7"]
     
     d = d[d.columns[~d.columns.str.contains("drop")]]
     
@@ -27,9 +27,19 @@ def read_modkit(modkit_output):
     )
 
     d["Percent_modified"] = d["Modified_bases"] / d["Total_coverage"]  
-    d["fraction_modified"] = d["fraction_modified"] / 100  # this is the value computed by modkit (-bedgraph)
+    d["Fraction_modified"] = d["Fraction_modified"] / 100  # this is the value computed by modkit (-bedgraph)
     
     return d
+
+
+def save_filtered_tables(modkit_table, folder_tables, percent_cutoff, min_coverage):
+    modifications = ["a", "m", "21839"] 
+    modification_names = {"a": "6ma", "m": "5mC", "21839": "4mc"}
+
+    for modification in modifications: 
+        filtered_table = modkit_table[(modkit_table.Total_coverage >= min_coverage) & (modkit_table.Modification == modification) & (modkit_table.Percent_modified >= percent_cutoff)].drop("End", axis=1)   
+        filtered_table_file_path  = f"{folder_tables}/filtered_modkit_table_{modification_names[modification]}.tsv"
+        filtered_table.to_csv(filtered_table_file_path, sep='\t', index=False)
 
 
 def create_bedgraphs_file(modkit_table, folder_bedgraphs, prefix, min_coverage):
@@ -54,7 +64,7 @@ if __name__ == "__main__":
     parser.add_argument('fasta_file_path', type=str, help='Path to the reference genome FASTA file')
     parser.add_argument('results_folder', type=str, help='Name of the folder with the results')
     parser.add_argument('--min_coverage', type=int, default=10, help='The minimum coverage required to consider a site for methylation (default 10)')
-    parser.add_argument('--percent_cutoff', type=int, default=0, help='Filter threshold for positions with a low level of methylation (default 0)') 
+    parser.add_argument('--percent_cutoff', type=float, default=0, help='Filter threshold for positions with a low level of methylation (default 0)') 
     args = parser.parse_args()
 
 
@@ -72,5 +82,10 @@ if __name__ == "__main__":
 
 
     modkit_table = read_modkit(modkit_file_path)
-    filtered_table = modkit_table[(modkit_table.Total_coverage >= min_coverage) & (modkit_table.Percent_modified >= percent_cutoff)].drop("End", axis=1) 
-    create_bedgraphs_file(modkit_table, args.results_folder, "bedgraph", min_coverage)
+    
+
+    results_table_path =  os.path.join(args.results_folder, "modifications_tables")
+    save_filtered_tables(modkit_table, results_table_path, percent_cutoff, min_coverage)
+
+    results_bedgraphs_path =  os.path.join(args.results_folder, "bedgraphs_customized")
+    create_bedgraphs_file(modkit_table, results_bedgraphs_path, "bedgraph", min_coverage)
