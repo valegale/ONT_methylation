@@ -162,7 +162,7 @@ The bedgraphs generated directly from Modkit can be found in the `bedgraphs` fol
 
 Modkit pileup aggregates the information from all reads for all positions of the reference genome and computes a value known as "fraction modified," which represents the percentage of reads with a methylated base for each position. This calculation considers only the reads where the base has passed the confidence threshold; thus, if a position has a high number of reads with bases that didn't meet this threshold, those reads are excluded from the count.
 
-In Modkit (check  [Description of bedMethyl output](https://github.com/nanoporetech/modkit#Description-of-bedMethyl-output), "fraction modified" is defined as N<sub>mod</sub> / N<sub>valid_cov</sub>. In our analysis, we introduce a new metric called "percent modified," computed as: N<sub>mod</sub> / (N<sub>valid_cov</sub> + N<sub>fail</sub> + N<sub>diff</sub>). This approach helps to prevent positions with only a few valid reads from being incorrectly classified as modified.
+In Modkit (check  [Description of bedMethyl output](https://github.com/nanoporetech/modkit#Description-of-bedMethyl-output)), "fraction modified" is defined as N<sub>mod</sub> / N<sub>valid_cov</sub>. In our analysis, we introduce a new metric called "percent modified," computed as: N<sub>mod</sub> / (N<sub>valid_cov</sub> + N<sub>fail</sub> + N<sub>diff</sub>). This approach helps to prevent positions with only a few valid reads from being incorrectly classified as modified.
 
 
 ## Running MicrobeMod
