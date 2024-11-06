@@ -130,8 +130,9 @@ def helpMSG() {
     --outdir            Name of the result folder [default: $params.outdir]
 
     ${c_yellow}Additional Options:${c_reset}${c_reset}
-    --filter_threshold_modkit            Filter threshold for modkit [default: $params.filter_threshold_modkit]
-
+    --filter_threshold_modkit             Filter threshold for modkit [default: $params.filter_threshold_modkit]
+    --percent_cutoff_modification_table   Percentage cutoff for the reported modification table [default: $params.percent_cutoff_modification_table].
+ 
     ${c_dim}Nextflow options:
     -with-report rep.html    cpu / ram usage (may cause errors)
     -with-dag chart.html     generates a flowchart for the process tree
