@@ -55,7 +55,7 @@ process custom_bedgraphs {
 }
 
 process modkit_find_motifs {
-    label 'modkit'
+    label 'modkit_low'
     // find motifs from the output of modkit pileup
     publishDir  params.outdir, mode:'copy'
 
