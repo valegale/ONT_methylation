@@ -55,7 +55,7 @@ conda install -c bioconda ont-modkit
 
 ### Preparing input: Basecalling with Dorado 
 
-Your Nanopore data needs to be basecalled in a methyltion-aware way to be usable as input for the pipeline. [Dorado](https://github.com/nanoporetech/dorado) is the official open-source basecaller for Oxford Nanopore reads. To basecall pod5 files, it is strongly recommended to use the v5 models in super high accuracy mode (SUP), as these include detection for 6mA, 5mC, and 4mC modifications.
+Your Nanopore data needs to be basecalled in a methylation-aware way to be usable as input for the pipeline. [Dorado](https://github.com/nanoporetech/dorado) is the official open-source basecaller for Oxford Nanopore reads. To basecall pod5 files, it is strongly recommended to use the v5 models in super high accuracy mode (SUP), as these include detection for 6mA, 5mC, and 4mC modifications.
 
 The following command will download the most recent models with super accuracy mode, using the methylation models for 6mA, 4mC and 5mC as well, and run Dorado. 
 
