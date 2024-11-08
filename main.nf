@@ -131,7 +131,7 @@ def helpMSG() {
 
     ${c_yellow}Additional Options:${c_reset}${c_reset}
     --filter_threshold_modkit             Filter threshold for modkit [default: $params.filter_threshold_modkit]
-    --percent_cutoff_modification_table   Percentage cutoff for the reported modification table [default: $params.percent_cutoff_modification_table].
+    --percent_cutoff_modification_table   Minimum methylation percentage required for genome positions to be reported in the modification tables [default: $params.percent_cutoff_modification_table].
  
     ${c_dim}Nextflow options:
     -with-report rep.html    cpu / ram usage (may cause errors)
