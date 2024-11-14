@@ -37,7 +37,7 @@ curl -s https://get.nextflow.io | bash
 
 However, if this does not work for you, you can also install Nextflow via [conda](https://docs.anaconda.com/miniconda/) or [mamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html).
 
-To avoid installing all necessary tool dependencies manually, we recommend using [Docker](https://docs.docker.com/get-started/get-docker/) or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/installation.html). Nextflow will then handle all your dependencies using the Docker or Singularity profile (see below). Alternatively, pre-configured conda environments are also available in the pipeline (See [Running with Containers](https://github.com/nanoporetech/modkit#Running-with-containers) for details on how to use containers. 
+To avoid installing all necessary tool dependencies manually, we recommend using [Docker](https://docs.docker.com/get-started/get-docker/) or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/installation.html). Nextflow will then handle all your dependencies using the Docker or Singularity profile (see below). Alternatively, pre-configured conda environments are also available in the pipeline (see [Running with Containers](https://github.com/nanoporetech/modkit#Running-with-containers) for details on how to use containers). 
 
 
 ### Preparing input: Basecalling with Dorado 
