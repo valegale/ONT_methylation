@@ -37,20 +37,7 @@ curl -s https://get.nextflow.io | bash
 
 However, if this does not work for you, you can also install Nextflow via [conda](https://docs.anaconda.com/miniconda/) or [mamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html).
 
-To avoid installing all necessary tool dependencies manually, we recommend using [Docker](https://docs.docker.com/get-started/get-docker/) or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/installation.html). Nextflow will then handle all your dependencies using the Docker or Singularity profile (see below). 
-
-**Not recommended!** Alternatively, the necessary dependencies can be also installed via [conda](https://docs.anaconda.com/miniconda/) or [mamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) outside of the Nextflow workflow:
-
-```bash
-conda create -n ONT_methylation -c bioconda samtools minimap2 biopython python=3.8 pandas
-conda activate ONT_methylation
-```
-
-Modkit can be installed from the [github repository](https://github.com/nanoporetech/modkit) or via conda as well
-
-```bash
-conda install -c bioconda ont-modkit
-```
+To avoid installing all necessary tool dependencies manually, we recommend using [Docker](https://docs.docker.com/get-started/get-docker/) or [Singularity](https://docs.sylabs.io/guides/3.0/user-guide/installation.html). Nextflow will then handle all your dependencies using the Docker or Singularity profile (see below). Alternatively, pre-configured conda environments are also available in the pipeline (See [Running with Containers](https://github.com/nanoporetech/modkit#Running-with-containers) for details on how to use containers. 
 
 
 ### Preparing input: Basecalling with Dorado 
@@ -159,6 +146,12 @@ To run the pipeline using Docker, use the following command:
 
 ```bash
 nextflow run valegale/ONT_methylation -r 0.0.1 --fasta sample_test.fasta --bam sample_test.bam -profile docker
+```
+
+
+To run the pipeline with SLURM and conda, use this command:
+```bash
+nextflow run nextflow pull valegale/ONT_methylation --fasta sample_test.fasta --bam sample_test.bam -profile slurm,conda
 ```
 
 To run the pipeline with SLURM and Singularity, use this command:
